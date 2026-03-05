@@ -1,0 +1,74 @@
+#ifndef PHILOSOPHERS_H
+# define PHILOSOPHERS_H
+
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <sys/time.h>
+#include <string.h>
+
+struct s_data;
+typedef struct s_data t_data;
+
+typedef struct s_philo
+{
+    int id;
+    pthread_t thread;
+    long long last_meal;
+    pthread_mutex_t time_manage;
+    pthread_mutex_t *fork_first;
+    pthread_mutex_t *fork_second;
+    t_data *data;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int num_of_eat;
+    int meal_count;
+    long long start_time;
+    pthread_mutex_t lock_meal_count;
+} t_philo;
+
+typedef struct s_data
+{
+    int num_of_philo;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int num_of_eat;
+    pthread_mutex_t *fork;
+    int death;
+    pthread_mutex_t death_check;
+    pthread_mutex_t print;
+    t_philo *philo;
+    long long start_time;
+    int total_eat;
+    pthread_mutex_t eat_count;
+} t_data;
+
+int input_check(int ac, char **av);
+
+int	ft_atoi(const char *nptr);
+int prep_data(t_data *data, char **av);
+int prep_philo(t_data *data);
+void mutex_init_data(t_data *data);
+
+void print_taken_fork(t_philo *philo);
+void print_is_eating(t_philo *philo);
+void print_is_sleeping(t_philo *philo);
+void print_is_thinking(t_philo *philo);
+void print_died(t_philo *philo);
+
+int prep_thread (t_data *data);
+int clean_thread(t_data *data);
+
+void *routine(void *arg);
+int eating(t_philo *philo);
+int sleeping(t_philo *philo);
+int death_check(t_philo *philo);
+
+void are_you_alive(t_data *data);
+
+void free_all(t_data *data);
+
+#endif
