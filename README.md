@@ -38,3 +38,5 @@ make
 To understand how thread works, I accessed the following resources
 
 Geeksforgeeks: https://www.geeksforgeeks.org/operating-systems/difference-between-process-and-thread/
+
+**AI Usage**: I used Gemini as a personal tutor in the design phase and did not ask it to write codes. Accrodingly, all codes in this project were written by me.
