@@ -22,3 +22,14 @@ int	ft_atoi(const char *nptr)
 	}
 	return (res * sign);
 }
+
+
+long long current_time_is()
+{
+	struct timeval current_time;
+	long long re;
+
+	gettimeofday(&current_time, NULL);
+    re = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
+	return re;
+}

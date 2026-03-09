@@ -1,11 +1,16 @@
 #include "philo.h"
 
-int death_check(t_philo *philo)
+int death_check(t_philo *philo, char flag)
 {
     pthread_mutex_lock(&philo->data->death_check);
     if(philo->data->death)
     {
         pthread_mutex_unlock(&philo->data->death_check);
+        if(flag == 'e')
+        {
+            pthread_mutex_unlock(philo->fork_first);
+            pthread_mutex_unlock(philo->fork_second);
+        }
         return 1;
     }
     pthread_mutex_unlock(&philo->data->death_check);
@@ -14,27 +19,18 @@ int death_check(t_philo *philo)
 
 int eating(t_philo *philo)
 {
-    struct timeval current_time;
-    long long milisecond;
+    long long current_time;
 
     pthread_mutex_lock(&philo->time_manage);
-    gettimeofday(&current_time, NULL);
-    milisecond = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
-    philo->last_meal = milisecond;
+    philo->last_meal =current_time_is();
     print_is_eating(philo);
     pthread_mutex_unlock(&philo->time_manage);
-    gettimeofday(&current_time, NULL);
-    milisecond = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
-    while(milisecond - philo->last_meal < philo->time_to_eat)
+    current_time = current_time_is();
+    while(current_time - philo->last_meal < philo->time_to_eat)
     {
-        if(death_check(philo))
-        {
-            pthread_mutex_unlock(philo->fork_first);
-            pthread_mutex_unlock(philo->fork_second);
+        if(death_check(philo, 'e'))
             return 1;
-        }
-        gettimeofday(&current_time, NULL);
-        milisecond = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
+        current_time = current_time_is();
         usleep(5);
     }
     if(philo->num_of_eat > 0)
@@ -51,22 +47,17 @@ int eating(t_philo *philo)
 
 int sleeping(t_philo *philo)
 {
-    struct timeval current_time;
     long long ct;
-    struct timeval sleep_start;
     long long ss;
     
     print_is_sleeping(philo);
-    gettimeofday(&sleep_start, NULL);
-    ss = (long long)sleep_start.tv_sec * 1000 + (sleep_start.tv_usec / 1000);
-    gettimeofday(&current_time, NULL);
-    ct = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
+    ss = current_time_is();
+    ct = current_time_is();
     while(ct - ss < philo->time_to_sleep)
     {
-        if(death_check(philo))
+        if(death_check(philo, 's'))
             return 1;
-        gettimeofday(&current_time, NULL);
-        ct = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
+        ct = current_time_is();
         usleep(5);
     }
     return 0;
@@ -74,17 +65,12 @@ int sleeping(t_philo *philo)
 
 void solo_philo(t_philo *philo)
 {
-    struct timeval current_time;
-    long long miliseconds;
+    long long current_time;
     
     print_taken_fork(philo);
-    gettimeofday(&current_time, NULL);
-    miliseconds = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
-    while(miliseconds - philo->start_time < philo->time_to_die)
-    {
-        gettimeofday(&current_time, NULL);
-        miliseconds = (long long)current_time.tv_sec * 1000 + (current_time.tv_usec / 1000);
-    }
+    current_time = current_time_is();
+    while(current_time - philo->start_time < philo->time_to_die)
+        current_time = current_time_is();
     pthread_mutex_lock(&philo->data->death_check);
     philo->data->death = 1;
     pthread_mutex_unlock(&philo->data->death_check);
@@ -97,10 +83,7 @@ void *routine(void *arg)
     
     philo = (t_philo*)arg;
     if(philo->data->num_of_philo == 1)
-    {
-        solo_philo(philo);
-        return NULL;
-    }
+        return solo_philo(philo), NULL;
     while(1)
     {
         pthread_mutex_lock(philo->fork_first);
@@ -108,11 +91,7 @@ void *routine(void *arg)
         pthread_mutex_lock(philo->fork_second);
         print_taken_fork(philo);
         if(eating(philo))
-        {
-            pthread_mutex_unlock(philo->fork_first);
-            pthread_mutex_unlock(philo->fork_second);
             return NULL;
-        }
         if(philo->meal_count == philo->num_of_eat)
         {
             pthread_mutex_unlock(philo->fork_first);

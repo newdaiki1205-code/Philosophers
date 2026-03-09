@@ -1,23 +1,12 @@
 #include "philo.h"
 
 int prep_data(t_data *data, char **av)
-{
-    struct timeval start;
-    
+{   
     data->num_of_philo = ft_atoi(av[1]);    
     data->time_to_die = ft_atoi(av[2]);
     data->time_to_eat = ft_atoi(av[3]);
     data->time_to_sleep = ft_atoi(av[4]);
-    if(av[5])
-    {
-        data->num_of_eat = ft_atoi(av[5]);
-        data->total_eat = 0;
-    } 
-    else
-    {
-        data->num_of_eat = -1;
-        data->total_eat = -1;
-    }
+    how_many_times(data, av);
     data->fork = (pthread_mutex_t *)malloc(data->num_of_philo * sizeof(pthread_mutex_t));
     if(!data->fork)
         return 1;
@@ -26,8 +15,7 @@ int prep_data(t_data *data, char **av)
     if(!data->philo)
         return 1;
     mutex_init_data(data);
-    gettimeofday(&start, NULL);
-    data->start_time = (long long)start.tv_sec * 1000 + (start.tv_usec/1000);
+    data->start_time = current_time_is();
     return 0;
 }
 
@@ -46,6 +34,19 @@ void mutex_init_data(t_data *data)
     pthread_mutex_init(&data->eat_count, NULL);
 }
 
+void how_many_times(t_data *data, char **av)
+{
+    if(av[5])
+    {
+        data->num_of_eat = ft_atoi(av[5]);
+        data->total_eat = 0;
+    } 
+    else
+    {
+        data->num_of_eat = -1;
+        data->total_eat = -1;
+    }
+}
 
 int prep_philo(t_data *data)
 {
@@ -70,15 +71,20 @@ int prep_philo(t_data *data)
         }
         pthread_mutex_init(&data->philo[i].time_manage, NULL);
         pthread_mutex_init(&data->philo[i].lock_meal_count, NULL);
-        data->philo[i].data = data;
-        data->philo[i].time_to_die = data->time_to_die;
-        data->philo[i].time_to_eat = data->time_to_eat;
-        data->philo[i].time_to_sleep = data->time_to_sleep;
-        data->philo[i].num_of_eat = data->num_of_eat;
-        data->philo[i].meal_count = 0;
-        data->philo[i].start_time = data->start_time;
-        data->philo[i].last_meal = data->start_time;
+        philo_init(data, i);
         i++;
     }
     return 0;
+}
+
+void philo_init(t_data *data, int i)
+{
+    data->philo[i].data = data;
+    data->philo[i].time_to_die = data->time_to_die;
+    data->philo[i].time_to_eat = data->time_to_eat;
+    data->philo[i].time_to_sleep = data->time_to_sleep;
+    data->philo[i].num_of_eat = data->num_of_eat;
+    data->philo[i].meal_count = 0;
+    data->philo[i].start_time = data->start_time;
+    data->philo[i].last_meal = data->start_time;
 }

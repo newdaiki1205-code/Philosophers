@@ -49,9 +49,12 @@ typedef struct s_data
 int input_check(int ac, char **av);
 
 int	ft_atoi(const char *nptr);
+
 int prep_data(t_data *data, char **av);
 int prep_philo(t_data *data);
 void mutex_init_data(t_data *data);
+void how_many_times(t_data *data, char **av);
+void philo_init(t_data *data, int i);
 
 void print_taken_fork(t_philo *philo);
 void print_is_eating(t_philo *philo);
@@ -65,10 +68,17 @@ int clean_thread(t_data *data);
 void *routine(void *arg);
 int eating(t_philo *philo);
 int sleeping(t_philo *philo);
-int death_check(t_philo *philo);
+int death_check(t_philo *philo, char flag);
 
 void are_you_alive(t_data *data);
 
 void free_all(t_data *data);
+
+long long current_time_is();
+
+void reaper_mutex_lock(t_data *data, t_philo *philo);
+void reaper_mutex_unlock(t_data *data, t_philo *philo);
+int reaper_eat_check(t_data *data);
+int reaper_death_check(t_data *data);
 
 #endif
