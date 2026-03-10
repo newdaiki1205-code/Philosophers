@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:24:33 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/09 14:24:45 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/10 19:09:30 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ void	*routine(void *arg)
 		print_taken_fork(philo);
 		if (eating(philo))
 			return (NULL);
+		// if (death_check(philo, 'e'))
+		// 	return (NULL);
 		if (philo->meal_count == philo->num_of_eat)
 		{
 			pthread_mutex_unlock(philo->fork_first);
@@ -114,6 +116,8 @@ void	*routine(void *arg)
 		pthread_mutex_unlock(philo->fork_second);
 		if (sleeping(philo))
 			return (NULL);
+		// if (death_check(philo, 's'))
+		// 	return (NULL);
 		print_is_thinking(philo);
 	}
 }
