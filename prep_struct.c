@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:25:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/09 14:55:10 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/12 16:07:42 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	mutex_init_data(t_data *data)
 	pthread_mutex_init(&data->death_check, NULL);
 	pthread_mutex_init(&data->print, NULL);
 	pthread_mutex_init(&data->eat_count, NULL);
+	pthread_mutex_init(&data->lock_routine, NULL);
 }
 
 void	how_many_times(t_data *data, char **av)
@@ -68,21 +69,12 @@ int	prep_philo(t_data *data)
 	i = 0;
 	while (i < data->num_of_philo)
 	{
-		data->philo[i].id = i;
-		if (i % 2 == 0)
-		{
-			data->philo[i].fork_first = &data->fork[i];
-			if (i == 0)
-				data->philo[i].fork_second = &data->fork[data->num_of_philo
-					- 1];
-			else
-				data->philo[i].fork_second = &data->fork[i - 1];
-		}
+		data->philo[i].id = i + 1;
+		data->philo[i].fork_left = &data->fork[i];
+		if (i == 0)
+			data->philo[i].fork_right = &data->fork[data->num_of_philo - 1];
 		else
-		{
-			data->philo[i].fork_first = &data->fork[i - 1];
-			data->philo[i].fork_second = &data->fork[i];
-		}
+			data->philo[i].fork_right = &data->fork[i - 1];
 		philo_init(data, i);
 		i++;
 	}
