@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   protect_free_n.c                                   :+:      :+:    :+:   */
+/*   protect_free.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:26:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 16:29:24 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/13 15:03:22 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	mutex_destroy_data(t_data *data)
 {
 	int	i;
 
-	if(data->fork)
+	if (data->fork)
 	{
 		i = 0;
 		while (i < data->num_of_philo)

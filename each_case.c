@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 16:03:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 16:04:56 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/13 15:22:45 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,10 @@ void	three_philo(t_philo *philo)
 		print_manager(philo, 'f');
 		if (eating(philo))
 			return ;
-		if (philo->meal_count == philo->num_of_eat)
-		{
-			pthread_mutex_unlock(philo->fork_left);
-			pthread_mutex_unlock(philo->fork_right);
-			return ;
-		}
 		pthread_mutex_unlock(philo->fork_left);
 		pthread_mutex_unlock(philo->fork_right);
+		if (philo->meal_count == philo->num_of_eat)
+			return ;
 		if (sleeping(philo))
 			return ;
 		print_manager(philo, 't');
@@ -66,14 +62,10 @@ void	even_philo(t_philo *philo)
 		print_manager(philo, 'f');
 		if (eating(philo))
 			return ;
-		if (philo->meal_count == philo->num_of_eat)
-		{
-			pthread_mutex_unlock(philo->fork_left);
-			pthread_mutex_unlock(philo->fork_right);
-			return ;
-		}
 		pthread_mutex_unlock(philo->fork_left);
 		pthread_mutex_unlock(philo->fork_right);
+		if (philo->meal_count == philo->num_of_eat)
+			return ;
 		if (sleeping(philo))
 			return ;
 		print_manager(philo, 't');
@@ -94,14 +86,10 @@ void	odd_philo(t_philo *philo)
 		print_manager(philo, 'f');
 		if (eating(philo))
 			return ;
-		if (philo->meal_count == philo->num_of_eat)
-		{
-			pthread_mutex_unlock(philo->fork_left);
-			pthread_mutex_unlock(philo->fork_right);
-			return ;
-		}
 		pthread_mutex_unlock(philo->fork_left);
 		pthread_mutex_unlock(philo->fork_right);
+		if (philo->meal_count == philo->num_of_eat)
+			return ;
 		if (sleeping(philo))
 			return ;
 		print_manager(philo, 't');

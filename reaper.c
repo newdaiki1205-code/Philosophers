@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:26:57 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 15:40:22 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/13 15:47:42 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	are_you_alive(t_data *data)
 		if (i == data->num_of_philo)
 			i = 0;
 		current_time = current_time_is();
-		usleep(500);
+		usleep(1000);
 		reaper_mutex_lock(data, &data->philo[i]);
 		if ((data->philo[i].meal_count != data->num_of_eat) && ((current_time
 					- data->start_time) - (data->philo[i].last_meal

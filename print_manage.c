@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 16:06:06 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 16:08:03 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/13 14:55:59 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ void	print_manager(t_philo *philo, char flag)
 
 	pthread_mutex_lock(&philo->data->print);
 	timestamp = current_time_is();
+	if (flag == 'e')
+	{
+		pthread_mutex_lock(&philo->time_manage);
+		philo->last_meal = timestamp;
+		pthread_mutex_unlock(&philo->time_manage);
+	}
 	if (flag == 'f')
 		print_taken_fork(philo, timestamp);
 	else if (flag == 'e')

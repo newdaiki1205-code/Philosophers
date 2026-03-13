@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:24:33 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 16:07:04 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/13 15:59:58 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,15 @@ int	eating(t_philo *philo)
 {
 	long long	current_time;
 
-	pthread_mutex_lock(&philo->time_manage);
-	philo->last_meal = current_time_is();
 	print_manager(philo, 'e');
-	pthread_mutex_unlock(&philo->time_manage);
 	current_time = current_time_is();
 	while (current_time - philo->last_meal < philo->time_to_eat)
 	{
 		if (death_check(philo, 'e'))
 			return (1);
 		current_time = current_time_is();
-		usleep(500);
+		if (philo->time_to_eat - (current_time - philo->last_meal) > 1)
+			usleep(500);
 	}
 	if (philo->num_of_eat > 0)
 	{
@@ -70,7 +68,8 @@ int	sleeping(t_philo *philo)
 		if (death_check(philo, 's'))
 			return (1);
 		ct = current_time_is();
-		usleep(500);
+		if (philo->time_to_sleep - (ct - ss) > 1)
+			usleep(500);
 	}
 	return (0);
 }
