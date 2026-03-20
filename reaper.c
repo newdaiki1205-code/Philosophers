@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:26:57 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/13 15:47:42 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 20:34:03 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ void	are_you_alive(t_data *data)
 			i = 0;
 		current_time = current_time_is();
 		usleep(1000);
-		reaper_mutex_lock(data, &data->philo[i]);
-		if ((data->philo[i].meal_count != data->num_of_eat) && ((current_time
-					- data->start_time) - (data->philo[i].last_meal
+		pthread_mutex_lock(&data->philo[i].time_manage);
+		if (!(are_you_full(data, i)) && ((current_time - data->start_time)
+				- (data->philo[i].last_meal
 					- data->start_time) >= data->time_to_die))
 		{
 			reaper_kill_program(data, i);
 			return ;
 		}
-		reaper_mutex_unlock(data, &data->philo[i]);
+		pthread_mutex_unlock(&data->philo[i].time_manage);
 		if (reaper_eat_check(data))
 			return ;
 		if (reaper_death_check(data))
@@ -41,41 +41,40 @@ void	are_you_alive(t_data *data)
 	}
 }
 
-void	reaper_mutex_lock(t_data *data, t_philo *philo)
-{
-	pthread_mutex_lock(&philo->time_manage);
-	pthread_mutex_lock(&philo->lock_meal_count);
-	pthread_mutex_lock(&data->eat_count);
-}
-
-void	reaper_mutex_unlock(t_data *data, t_philo *philo)
-{
-	pthread_mutex_unlock(&philo->time_manage);
-	pthread_mutex_unlock(&philo->lock_meal_count);
-	pthread_mutex_unlock(&data->eat_count);
-}
-
 int	reaper_eat_check(t_data *data)
 {
-	pthread_mutex_lock(&data->eat_count);
+	pthread_mutex_lock(&data->acess_data);
 	if (data->num_of_eat > 0 && (data->total_eat == data->num_of_philo
 			* data->num_of_eat))
 	{
-		pthread_mutex_unlock(&data->eat_count);
+		pthread_mutex_unlock(&data->acess_data);
 		return (1);
 	}
-	pthread_mutex_unlock(&data->eat_count);
+	pthread_mutex_unlock(&data->acess_data);
 	return (0);
 }
 
 int	reaper_death_check(t_data *data)
 {
-	pthread_mutex_lock(&data->death_check);
+	pthread_mutex_lock(&data->acess_data);
 	if (data->death)
 	{
-		pthread_mutex_unlock(&data->death_check);
+		pthread_mutex_unlock(&data->acess_data);
 		return (1);
 	}
-	pthread_mutex_unlock(&data->death_check);
+	pthread_mutex_unlock(&data->acess_data);
 	return (0);
+}
+
+int	are_you_full(t_data *data, int i)
+{
+	int	re;
+
+	pthread_mutex_lock(&data->acess_data);
+	if (data->finish_eat[i])
+		re = 1;
+	else
+		re = 0;
+	pthread_mutex_unlock(&data->acess_data);
+	return (re);
 }

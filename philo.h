@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_n.h                                          :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:25:02 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 16:28:37 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 21:06:13 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,33 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				num_of_eat;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	acess_data;
 	int				death;
-	pthread_mutex_t	death_check;
-	pthread_mutex_t	print;
 	struct s_philo	*philo;
 	long long		start_time;
 	int				total_eat;
-	pthread_mutex_t	eat_count;
-	pthread_mutex_t	lock_routine;
+	int				*finish_eat;
 }					t_data;
 
 typedef struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	long long		last_meal;
 	pthread_mutex_t	time_manage;
+	long long		last_meal;
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
-	t_data			*data;
+	pthread_mutex_t	*access_data;
+	int				*death;
+	int				*total_eat;
+	int				num_of_philo;
+	int				*finish_eat;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				num_of_eat;
 	int				meal_count;
 	long long		start_time;
-	pthread_mutex_t	lock_meal_count;
 }					t_philo;
 
 int					input_check(int ac, char **av);
@@ -97,5 +98,11 @@ void				print_is_eating(t_philo *philo);
 void				print_is_sleeping(t_philo *philo, long long timestamp);
 void				print_is_thinking(t_philo *philo, long long timestamp);
 void				print_died(t_philo *philo, long long timestamp);
+
+int					are_you_full(t_data *data, int i);
+void				mutex_destroy_philo(t_data *data);
+pthread_mutex_t		*fork_first(t_philo *philo);
+pthread_mutex_t		*fork_second(t_philo *philo);
+int					meal_count_check(t_philo *philo);
 
 #endif

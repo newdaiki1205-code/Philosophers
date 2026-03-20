@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:26:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/13 15:03:22 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 21:09:15 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ int	input_check(int ac, char **av)
 
 void	free_all(t_data *data)
 {
+	mutex_destroy_philo(data);
 	mutex_destroy_data(data);
 	if (data->fork)
 		free(data->fork);
 	if (data->philo)
 		free(data->philo);
+	if (data->finish_eat)
+		free(data->finish_eat);
 	if (data)
 		free(data);
 }
@@ -52,8 +55,20 @@ void	mutex_destroy_data(t_data *data)
 			i++;
 		}
 	}
-	pthread_mutex_destroy(&data->death_check);
-	pthread_mutex_destroy(&data->print);
-	pthread_mutex_destroy(&data->eat_count);
-	pthread_mutex_destroy(&data->lock_routine);
+	pthread_mutex_destroy(&data->acess_data);
+}
+
+void	mutex_destroy_philo(t_data *data)
+{
+	int	i;
+
+	if (data->philo)
+	{
+		i = 0;
+		while (i < data->num_of_philo)
+		{
+			pthread_mutex_destroy(&data->philo[i].time_manage);
+			i++;
+		}
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:27:31 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 13:20:15 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 18:45:18 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	prep_thread(t_data *data)
 	int	i;
 
 	i = 0;
-	pthread_mutex_lock(&data->lock_routine);
+	pthread_mutex_lock(&data->acess_data);
 	while (i < data->num_of_philo)
 	{
 		if (pthread_create(&data->philo[i].thread, NULL, routine,
@@ -25,7 +25,7 @@ int	prep_thread(t_data *data)
 			return (1);
 		i++;
 	}
-	pthread_mutex_unlock(&data->lock_routine);
+	pthread_mutex_unlock(&data->acess_data);
 	return (0);
 }
 

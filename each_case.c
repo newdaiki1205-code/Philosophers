@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 16:03:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/13 15:22:45 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 21:08:50 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,50 +21,31 @@ void	solo_philo(t_philo *philo)
 	while (current_time - philo->start_time < philo->time_to_die)
 		current_time = current_time_is();
 	print_manager(philo, 'd');
-	pthread_mutex_lock(&philo->data->death_check);
-	philo->data->death = 1;
-	pthread_mutex_unlock(&philo->data->death_check);
-}
-
-void	three_philo(t_philo *philo)
-{
-	if (philo->id == 2)
-		usleep(philo->time_to_eat * 500);
-	if (philo->id == 3)
-		usleep(philo->time_to_eat * 1000);
-	while (1)
-	{
-		pthread_mutex_lock(philo->fork_left);
-		print_manager(philo, 'f');
-		pthread_mutex_lock(philo->fork_right);
-		print_manager(philo, 'f');
-		if (eating(philo))
-			return ;
-		pthread_mutex_unlock(philo->fork_left);
-		pthread_mutex_unlock(philo->fork_right);
-		if (philo->meal_count == philo->num_of_eat)
-			return ;
-		if (sleeping(philo))
-			return ;
-		print_manager(philo, 't');
-	}
+	pthread_mutex_lock(philo->access_data);
+	*philo->death = 1;
+	pthread_mutex_unlock(philo->access_data);
 }
 
 void	even_philo(t_philo *philo)
 {
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
+	first = fork_first(philo);
+	second = fork_second(philo);
 	if (philo->id % 2 == 0)
 		usleep(5000);
 	while (1)
 	{
-		pthread_mutex_lock(philo->fork_left);
+		pthread_mutex_lock(first);
 		print_manager(philo, 'f');
-		pthread_mutex_lock(philo->fork_right);
+		pthread_mutex_lock(second);
 		print_manager(philo, 'f');
 		if (eating(philo))
 			return ;
-		pthread_mutex_unlock(philo->fork_left);
-		pthread_mutex_unlock(philo->fork_right);
-		if (philo->meal_count == philo->num_of_eat)
+		pthread_mutex_unlock(first);
+		pthread_mutex_unlock(second);
+		if (meal_count_check(philo))
 			return ;
 		if (sleeping(philo))
 			return ;
@@ -74,21 +55,26 @@ void	even_philo(t_philo *philo)
 
 void	odd_philo(t_philo *philo)
 {
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
+	first = fork_first(philo);
+	second = fork_second(philo);
 	if (philo->id % 2 == 0)
 		usleep(philo->time_to_eat * 500);
-	if (philo->id == philo->data->num_of_philo)
+	if (philo->id == philo->num_of_philo)
 		usleep(philo->time_to_eat * 1000);
 	while (1)
 	{
-		pthread_mutex_lock(philo->fork_left);
+		pthread_mutex_lock(first);
 		print_manager(philo, 'f');
-		pthread_mutex_lock(philo->fork_right);
+		pthread_mutex_lock(second);
 		print_manager(philo, 'f');
 		if (eating(philo))
 			return ;
-		pthread_mutex_unlock(philo->fork_left);
-		pthread_mutex_unlock(philo->fork_right);
-		if (philo->meal_count == philo->num_of_eat)
+		pthread_mutex_unlock(first);
+		pthread_mutex_unlock(second);
+		if (meal_count_check(philo))
 			return ;
 		if (sleeping(philo))
 			return ;

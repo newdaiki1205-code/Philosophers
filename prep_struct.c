@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:25:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/12 16:07:42 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 21:08:58 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int	prep_data(t_data *data, char **av)
 		return (1);
 	mutex_init_data(data);
 	data->start_time = current_time_is();
+	data->finish_eat = (int *)malloc(data->num_of_philo * sizeof(int));
+	if (!data->finish_eat)
+		return (1);
+	memset(data->finish_eat, 0, data->num_of_philo * sizeof(int));
 	return (0);
 }
 
@@ -42,10 +46,7 @@ void	mutex_init_data(t_data *data)
 		pthread_mutex_init(&data->fork[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&data->death_check, NULL);
-	pthread_mutex_init(&data->print, NULL);
-	pthread_mutex_init(&data->eat_count, NULL);
-	pthread_mutex_init(&data->lock_routine, NULL);
+	pthread_mutex_init(&data->acess_data, NULL);
 }
 
 void	how_many_times(t_data *data, char **av)
@@ -84,8 +85,8 @@ int	prep_philo(t_data *data)
 void	philo_init(t_data *data, int i)
 {
 	pthread_mutex_init(&data->philo[i].time_manage, NULL);
-	pthread_mutex_init(&data->philo[i].lock_meal_count, NULL);
-	data->philo[i].data = data;
+	data->philo[i].access_data = &data->acess_data;
+	data->philo[i].num_of_philo = data->num_of_philo;
 	data->philo[i].time_to_die = data->time_to_die;
 	data->philo[i].time_to_eat = data->time_to_eat;
 	data->philo[i].time_to_sleep = data->time_to_sleep;
@@ -93,4 +94,7 @@ void	philo_init(t_data *data, int i)
 	data->philo[i].meal_count = 0;
 	data->philo[i].start_time = data->start_time;
 	data->philo[i].last_meal = data->start_time;
+	data->philo[i].death = &data->death;
+	data->philo[i].total_eat = &data->total_eat;
+	data->philo[i].finish_eat = &data->finish_eat[i];
 }

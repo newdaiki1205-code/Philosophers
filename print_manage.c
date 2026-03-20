@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 16:06:06 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/13 14:55:59 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/20 19:12:59 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	print_manager(t_philo *philo, char flag)
 {
 	long long	timestamp;
 
-	pthread_mutex_lock(&philo->data->print);
 	timestamp = current_time_is();
 	if (flag == 'e')
 	{
@@ -24,6 +23,7 @@ void	print_manager(t_philo *philo, char flag)
 		philo->last_meal = timestamp;
 		pthread_mutex_unlock(&philo->time_manage);
 	}
+	pthread_mutex_lock(philo->access_data);
 	if (flag == 'f')
 		print_taken_fork(philo, timestamp);
 	else if (flag == 'e')
@@ -34,5 +34,5 @@ void	print_manager(t_philo *philo, char flag)
 		print_is_thinking(philo, timestamp);
 	else if (flag == 'd')
 		print_died(philo, timestamp);
-	pthread_mutex_unlock(&philo->data->print);
+	pthread_mutex_unlock(philo->access_data);
 }
