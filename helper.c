@@ -6,15 +6,15 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:23:01 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 21:09:29 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/26 17:08:38 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_atoi(const char *nptr)
+long long	ft_atoll(const char *nptr)
 {
-	int	res;
+	long long	res;
 	int	sign;
 
 	res = 0;
@@ -30,6 +30,8 @@ int	ft_atoi(const char *nptr)
 	while (*nptr >= '0' && *nptr <= '9')
 	{
 		res = res * 10 + (*nptr - '0');
+		if(res > 2147483647 || res < -2147483648)
+			return -1;
 		nptr++;
 	}
 	return (res * sign);

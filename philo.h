@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:25:02 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 21:06:13 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:10:49 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_philo
 }					t_philo;
 
 int					input_check(int ac, char **av);
-int					ft_atoi(const char *nptr);
+long long			ft_atoll(const char *nptr);
 void				free_all(t_data *data);
 void				mutex_destroy_data(t_data *data);
 

@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:25:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 21:08:58 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:10:20 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	prep_data(t_data *data, char **av)
 {
-	data->num_of_philo = ft_atoi(av[1]);
-	data->time_to_die = ft_atoi(av[2]);
-	data->time_to_eat = ft_atoi(av[3]);
-	data->time_to_sleep = ft_atoi(av[4]);
+	data->num_of_philo = ft_atoll(av[1]);
+	data->time_to_die = ft_atoll(av[2]);
+	data->time_to_eat = ft_atoll(av[3]);
+	data->time_to_sleep = ft_atoll(av[4]);
 	how_many_times(data, av);
 	data->fork = (pthread_mutex_t *)malloc(data->num_of_philo
 			* sizeof(pthread_mutex_t));
@@ -53,7 +53,7 @@ void	how_many_times(t_data *data, char **av)
 {
 	if (av[5])
 	{
-		data->num_of_eat = ft_atoi(av[5]);
+		data->num_of_eat = ft_atoll(av[5]);
 		data->total_eat = 0;
 	}
 	else

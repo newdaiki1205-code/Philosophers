@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:23:21 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 18:44:40 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:15:39 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int ac, char **av)
 	if (ac != 5 && ac != 6)
 		return (printf("Arguments should be 4 or 5\n"), 0);
 	if (input_check(ac, av))
-		return (printf("Arguments should be positive integers\n"), 1);
+		return (printf("Arguments should be between 1 and INT_MAX\n"), 1);
 	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)
 		return (1);

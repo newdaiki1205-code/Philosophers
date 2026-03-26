@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:26:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 21:09:15 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/26 16:10:20 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	input_check(int ac, char **av)
 	i = 1;
 	while (i < ac)
 	{
-		num = ft_atoi(av[i]);
+		num = ft_atoll(av[i]);
 		if (num < 1)
 			return (1);
 		i++;
