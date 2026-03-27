@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:24:33 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/26 17:59:42 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:48:31 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,16 @@ int	death_check(t_philo *philo, char flag)
 
 int	eating(t_philo *philo)
 {
-	long long eat_start;
-	
+	long long	eat_start;
+	long long	wait_time;
+
 	print_manager(philo, 'e');
 	pthread_mutex_lock(&philo->time_manage);
 	eat_start = philo->last_meal;
 	pthread_mutex_unlock(&philo->time_manage);
-	if(smart_sleep(philo, eat_start, 'e'))
-		return 1;
+	wait_time = (long long)philo->time_to_eat;
+	if (smart_sleep(philo, eat_start, 'e', wait_time))
+		return (1);
 	if (philo->num_of_eat > 0)
 	{
 		philo->meal_count++;
@@ -46,67 +48,42 @@ int	eating(t_philo *philo)
 	return (0);
 }
 
-int smart_sleep(t_philo *philo, long long start_time, char flag)
-{
-	while (current_time_is() - start_time < philo->time_to_eat)
-	{
-		pthread_mutex_lock(philo->access_data);
-		if (death_check(philo, flag))
-		{
-			pthread_mutex_unlock(philo->access_data);
-			return (1);
-		}
-		pthread_mutex_unlock(philo->access_data);
-		if(flag == 'e' && (philo->time_to_eat - (current_time_is() - start_time) > 1))
-			usleep(500);
-		else if (flag == 's' && (philo->time_to_eat - (current_time_is() - start_time) > 1))
-			usleep(500);
-	}
-	return 0;
-}
-
-
 int	sleeping(t_philo *philo)
 {
 	long long	sleep_start;
+	long long	wait_time;
 
 	print_manager(philo, 's');
 	sleep_start = current_time_is();
-	if(smart_sleep(philo, sleep_start, 's'))
-		return 1;
+	wait_time = (long long)philo->time_to_sleep;
+	if (smart_sleep(philo, sleep_start, 's', wait_time))
+		return (1);
 	return (0);
 }
 
-// int	thinking(t_philo *philo)
-// {
-// 	long long	target_time;
-// 	long long	think_time;
+int	thinking(t_philo *philo)
+{
+	long long	next_eat;
+	long long	time_to_think;
+	long long	last_meal;
+	long long	think_start;
 
-// 	print_manager(philo, 't');
-// 	target_time = philo->last_meal + (philo->time_to_eat * 2);
-
-// 	if(target_time > current_time_is())
-// 	{
-// 		think_time = 
-// 	}
-
-	
-// 	ss = current_time_is();
-// 	while (current_time_is() - ss < philo->time_to_sleep)
-// 	{
-// 		pthread_mutex_lock(philo->access_data);
-// 		if (death_check(philo, 's'))
-// 		{
-// 			pthread_mutex_unlock(philo->access_data);
-// 			return (1);
-// 		}
-// 		pthread_mutex_unlock(philo->access_data);
-// 		if (philo->time_to_sleep - (current_time_is() - ss) > 1)
-// 			usleep(500);
-// 	}
-// 	return (0);
-// }
-
+	print_manager(philo, 't');
+	pthread_mutex_lock(&philo->time_manage);
+	last_meal = philo->last_meal;
+	pthread_mutex_unlock(&philo->time_manage);
+	think_start = current_time_is();
+	next_eat = last_meal + (philo->time_to_eat * 3);
+	time_to_think = (long long)philo->time_to_eat * 2
+		- (long long)philo->time_to_sleep;
+	if (next_eat > current_time_is())
+	{
+		usleep((time_to_think * 0.7) * 1000);
+		if (smart_sleep(philo, think_start, 't', time_to_think * 0.9))
+			return (1);
+	}
+	return (0);
+}
 
 void	*routine(void *arg)
 {

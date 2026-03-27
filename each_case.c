@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 16:03:36 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 21:08:50 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:46:43 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	even_philo(t_philo *philo)
 	first = fork_first(philo);
 	second = fork_second(philo);
 	if (philo->id % 2 == 0)
-		usleep(5000);
+		usleep(philo->time_to_eat * 1000);
 	while (1)
 	{
 		pthread_mutex_lock(first);
@@ -60,10 +60,7 @@ void	odd_philo(t_philo *philo)
 
 	first = fork_first(philo);
 	second = fork_second(philo);
-	if (philo->id % 2 == 0)
-		usleep(philo->time_to_eat * 500);
-	if (philo->id == philo->num_of_philo)
-		usleep(philo->time_to_eat * 1000);
+	waiting_list(philo);
 	while (1)
 	{
 		pthread_mutex_lock(first);
@@ -78,6 +75,7 @@ void	odd_philo(t_philo *philo)
 			return ;
 		if (sleeping(philo))
 			return ;
-		print_manager(philo, 't');
+		if (thinking(philo))
+			return ;
 	}
 }

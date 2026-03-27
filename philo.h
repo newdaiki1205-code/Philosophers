@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:25:02 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/26 16:10:49 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:47:23 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,9 @@ pthread_mutex_t		*fork_first(t_philo *philo);
 pthread_mutex_t		*fork_second(t_philo *philo);
 int					meal_count_check(t_philo *philo);
 
-int smart_sleep(t_philo *philo, long long start_time, char flag);
+int					smart_sleep(t_philo *philo, long long start_time, char flag,
+						long long wait_time);
+int					thinking(t_philo *philo);
+void				waiting_list(t_philo *philo);
 
 #endif
