@@ -23,7 +23,7 @@ void	are_you_alive(t_data *data)
 		if (i == data->num_of_philo)
 			i = 0;
 		current_time = current_time_is();
-		usleep(1000);
+		usleep(100);
 		pthread_mutex_lock(&data->philo[i].time_manage);
 		if (!(are_you_full(data, i)) && ((current_time - data->start_time)
 				- (data->philo[i].last_meal
