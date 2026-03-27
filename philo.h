@@ -105,4 +105,6 @@ pthread_mutex_t		*fork_first(t_philo *philo);
 pthread_mutex_t		*fork_second(t_philo *philo);
 int					meal_count_check(t_philo *philo);
 
+int smart_sleep(t_philo *philo, long long start_time, char flag);
+
 #endif
