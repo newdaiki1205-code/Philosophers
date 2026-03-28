@@ -34,7 +34,7 @@ void	even_philo(t_philo *philo)
 	first = fork_first(philo);
 	second = fork_second(philo);
 	if (philo->id % 2 == 0)
-		usleep(philo->time_to_eat * 1000);
+		usleep(philo->time_to_eat * 1000 * 0.8);
 	while (1)
 	{
 		pthread_mutex_lock(first);

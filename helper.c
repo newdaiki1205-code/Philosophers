@@ -58,7 +58,9 @@ int	smart_sleep(t_philo *philo, long long start_time, char flag,
 		}
 		pthread_mutex_unlock(philo->access_data);
 		if ((wait_time - (current_time_is() - start_time) > 1))
-			usleep(500);
+			usleep(1000);
+		else
+			usleep(100);
 	}
 	return (0);
 }
