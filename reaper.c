@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:26:57 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 20:34:03 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:22:21 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	are_you_alive(t_data *data)
 		if (i == data->num_of_philo)
 			i = 0;
 		current_time = current_time_is();
-		usleep(100);
 		pthread_mutex_lock(&data->philo[i].time_manage);
 		if (!(are_you_full(data, i)) && ((current_time - data->start_time)
 				- (data->philo[i].last_meal

@@ -6,7 +6,7 @@
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 21:07:24 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 21:08:46 by dshirais         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:22:09 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ long long	current_time_is(void)
 
 void	reaper_kill_program(t_data *data, int i)
 {
+	print_manager(&data->philo[i], 'd');
 	pthread_mutex_lock(&data->acess_data);
 	data->death = 1;
 	pthread_mutex_unlock(&data->acess_data);
-	print_manager(&data->philo[i], 'd');
 	pthread_mutex_unlock(&data->philo[i].time_manage);
 }
 

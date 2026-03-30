@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dshirais <dshirais@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/09 14:26:03 by dshirais          #+#    #+#             */
-/*   Updated: 2026/03/20 18:48:02 by dshirais         ###   ########.fr       */
+/*   Created: 2026/03/30 16:11:23 by dshirais          #+#    #+#             */
+/*   Updated: 2026/03/30 16:22:37 by dshirais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	print_is_thinking(t_philo *philo, long long timestamp)
 
 void	print_died(t_philo *philo, long long timestamp)
 {
+	if (death_check(philo, 'd'))
+		return ;
 	printf("%lld Philosopher %d died\n", timestamp - philo->start_time,
 		philo->id);
 }
